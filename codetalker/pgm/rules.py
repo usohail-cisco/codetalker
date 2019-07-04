@@ -27,7 +27,7 @@ class RuleLoader(object):
 
     def process(self, what):
         if type(what) == str:
-            return [what]
+            return [what.encode()]
         elif inspect.isclass(what) and issubclass(what, Token):
             if what not in self.grammar.tokens and what not in self.grammar.special_tokens:
                 # print 'adding', what

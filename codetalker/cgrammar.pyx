@@ -562,7 +562,7 @@ cdef object convert_ast_attrs(object ast_attrs, object rules, object tokens, Ast
             continue
         else:
             result[i].pass_single = 0
-        keys = ast_attrs[i]['attrs'].keys()
+        keys = list(ast_attrs[i]['attrs'].keys())
         result[i].num = len(keys)
         if len(keys):
             result[i].attrs = <AstAttr*>malloc(sizeof(AstAttr)*result[i].num);

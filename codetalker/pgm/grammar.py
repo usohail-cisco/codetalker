@@ -1,5 +1,7 @@
-import inspect
+from __future__ import print_function
 from future.utils import iteritems
+
+import inspect
 
 from .rules import RuleLoader
 from .tokens import EOF, INDENT, DEDENT, Token
@@ -50,7 +52,8 @@ class Grammar:
                 self.tokens.append(i)
         self.ast_tokens = tuple(self.tokens.index(tok) for tok in ast_tokens)
         self.indent = indent
-        self.idchars = idchars
+        # Note this needs to be reviewed, should we be converting str to bytes or the other way around
+        self.idchars = idchars.encode()
 
         self.token_rules = []
         self.token_names = []
@@ -98,9 +101,9 @@ class Grammar:
         name = getattr(builder, 'astName', None)
         if name is None:
             name = camelCase(builder.__name__)
-        
+
         rule = RuleLoader(self)
-        rule.name = name
+        rule.name = name.encode()
 
         self.rule_dict[builder] = num
         self.rules.append(rule)
@@ -263,17 +266,20 @@ class Grammar:
     def parse_rule(self, rule, tokens, error):
         if rule < 0 or rule >= len(self.rules):
             raise ParseError('invalid rule: %d' % rule)
-        if logger.output:print>>logger, 'parsing for rule', self.rule_names[rule]
+        if logger.output:
+            print('parsing for rule', self.rule_names[rule], file=logger)
         logger.indent += 1
         node = ParseTree(rule, self.rule_names[rule])
         for option in self.rules[rule]:
             res = self.parse_children(rule, option, tokens, error)
             if res is not None:
-                if logger.output:print>>logger, 'yes!',self.rule_names[rule], res
+                if logger.output:
+                    print('yes!', self.rule_names[rule], res, file=logger)
                 logger.indent -= 1
                 node.children = res
                 return node
-        if logger.output:print>>logger, 'failed', self.rule_names[rule]
+        if logger.output:
+            print('failed', self.rule_names[rule], file=logger)
         logger.indent -= 1
         return None
     
@@ -286,7 +292,8 @@ class Grammar:
                     res.append(tokens.current())
                     tokens.advance()
             current = children[i]
-            if logger.output:print>>logger, 'parsing child',current,i
+            if logger.output:
+                print('parsing child', current, i, file=logger)
             if type(current) == int:
                 if current < 0:
                     ctoken = tokens.current()
