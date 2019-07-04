@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from future.utils import lrange
+
 from codetalker.pgm import Grammar, Translator
 from codetalker.pgm.special import star, plus, _or
 from codetalker.pgm.tokens import *
@@ -52,10 +54,10 @@ class Config:
         if '%' not in value: # no need to interpolate
             return value
         vbls = {}
-        for i in xrange(1000): # just in case something goes wrong...
+        for i in lrange(1000): # just in case something goes wrong...
             try:
                 return value % vbls
-            except KeyError, e:
+            except KeyError as e:
                 vbls[e.args[0]] = self.get_item(section, e.args[0], check + (name,))
         raise RecursionError('resursive interpolation...')
 
