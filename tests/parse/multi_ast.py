@@ -34,7 +34,7 @@ def start3(rule):
 def test_three():
     try:
         g3 = pgm.Grammar(start=start3, tokens=[], ignore=[])
-    except AstError, e:
+    except AstError as e:
         pass
     else:
         raise AssertionError('was supposed to fail -- invalid ast type')
@@ -43,8 +43,8 @@ if __name__ == '__main__':
     for name, fn in globals().items():
         if name.startswith('test_'):
             fn()
-            print 'test passed'
-    print 'Finished!'
+            print('test passed')
+    print('Finished!')
 
 
 # vim: et sw=4 sts=4

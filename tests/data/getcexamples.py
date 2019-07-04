@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-from urllib import urlopen as upen
+from future.moves.urllib.request import urlopen as upen
 import re
 
 def get_code(num):
-    print 'get page...'
+    print('get page...')
     url = 'http://www.c.happycodings.com/code_snippets/code%d.html' % num
     text = upen(url).read()
-    print 'got'
+    print('got')
     code = re.findall('<TEXTAREA[^>]*>(.+?)</TEXTAREA>', text, re.S)
     return code[0]
 
