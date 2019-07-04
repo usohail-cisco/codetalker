@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from errors import *
-import tokens
-from tokens import Token
+from .errors import *
+from . import tokens
+from .tokens import Token
 import types
-from special import Special
+from .special import Special
 import inspect
 
 class RuleLoader(object):

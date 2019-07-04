@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-from tokens import Token
+from .tokens import Token
 import types
 import inspect
 import copy
-from nodes import AstNode
+from .nodes import AstNode
 
-from errors import CodeTalkerException
+from .errors import CodeTalkerException
 
 class TranslatorException(CodeTalkerException):
     pass

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from tokens import INDENT, DEDENT
-from errors import *
+from .tokens import INDENT, DEDENT
+from .errors import *
 
 class Text:
     '''a small utility class in charge of serving up

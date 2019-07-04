@@ -1,9 +1,9 @@
-from rules import RuleLoader
-from tokens import EOF, INDENT, DEDENT, Token
-from errors import *
+from .rules import RuleLoader
+from .tokens import EOF, INDENT, DEDENT, Token
+from .errors import *
 
-from nodes import AstNode, ParseTree, TokenStream
-from logger import logger
+from .nodes import AstNode, ParseTree, TokenStream
+from .logger import logger
 import inspect
 
 # from codetalker.pgm.cgrammar.tokenize import tokenize

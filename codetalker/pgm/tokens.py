@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from token import Token, ReToken
+from .token import Token, ReToken
 
 import re
 
