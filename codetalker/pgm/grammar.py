@@ -1,10 +1,12 @@
+import inspect
+from future.utils import iteritems
+
 from .rules import RuleLoader
 from .tokens import EOF, INDENT, DEDENT, Token
 from .errors import *
 
 from .nodes import AstNode, ParseTree, TokenStream
 from .logger import logger
-import inspect
 
 # from codetalker.pgm.cgrammar.tokenize import tokenize
 # from codetalker.pgm.cgrammar import main
@@ -110,7 +112,7 @@ class Grammar:
         if not rule.options:
             raise Exception('no rule options specified in %r' % builder)
         attrs = []
-        for attr, dct in rule.astAttrs.iteritems():
+        for attr, dct in iteritems(rule.astAttrs):
             if type(dct) != dict:
                 dct = {'type':dct}
             if type(dct['type']) not in (tuple, list):

@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
-from .tokens import Token
 import types
 import inspect
 import copy
+from future.utils import iteritems
+
+from .tokens import Token
 from .nodes import AstNode
 
 from .errors import CodeTalkerException
@@ -68,7 +69,7 @@ class Translator:
                 stuff.update(args)
                 Scope = type('Scope', (), {})
                 scope = Scope()
-                for k,v in stuff.iteritems():
+                for k, v in iteritems(stuff):
                     setattr(scope, k, v)
             return self.translate(tree, scope)
         elif args:
