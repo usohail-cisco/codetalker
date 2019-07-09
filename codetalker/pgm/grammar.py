@@ -103,8 +103,7 @@ class Grammar:
             name = camelCase(builder.__name__)
 
         rule = RuleLoader(self)
-        rule.name = name.encode()
-
+        rule.name = name
         self.rule_dict[builder] = num
         self.rules.append(rule)
         self.rule_names.append(name)

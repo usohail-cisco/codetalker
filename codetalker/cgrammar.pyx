@@ -1,5 +1,6 @@
 # cython: profile=True
 from libc.stdlib cimport malloc, free
+from cpython.version cimport PY_MAJOR_VERSION
 
 from codetalker.pgm.tokens import INDENT, DEDENT, EOF, Token as PyToken, ReToken
 from codetalker.pgm.errors import ParseError, TokenError, AstError
@@ -478,6 +479,7 @@ cdef Rule convert_rule(object rule, unsigned int i):
     crule.dont_ignore = rule.dont_ignore
     crule.num = len(rule.options)
     crule.options = <RuleOption*>malloc(sizeof(RuleOption)*crule.num)
+    rule.name = rule.name.encode()
     crule.name = rule.name
     crule.keep_tree = rule.keep_tree
     for i from 0<=i<crule.num:
@@ -570,7 +572,10 @@ cdef object convert_ast_attrs(object ast_attrs, object rules, object tokens, Ast
             result[i].attrs = NULL
 
         for m from 0<=m<result[i].num:
-             convert_ast_attr(keys[m], ast_attrs[i]['attrs'][keys[m]], rules, tokens, &result[i].attrs[m])
+             key = keys[m]
+             if PY_MAJOR_VERSION >= 3 and isinstance(keys[m], str):
+                 key = keys[m].encode()
+             convert_ast_attr(key, ast_attrs[i]['attrs'][keys[m]], rules, tokens, &result[i].attrs[m])
 
 cdef object which_rt(object it, object rules, object tokens):
     '''convert an ast type (rule or token object) into the appropriate ID, ready for AST construction.
