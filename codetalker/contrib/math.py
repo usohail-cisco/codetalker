@@ -41,7 +41,7 @@ m = pgm.Translator(grammar)
 ast = grammar.ast_classes
 
 import operator
-ops = {'**':operator.pow, '*':operator.mul, '/':operator.div, '%':operator.mod, '+':operator.add, '-':operator.sub}
+ops = {'**':operator.pow, '*':operator.mul, '/':operator.truediv, '%':operator.mod, '+':operator.add, '-':operator.sub}
 
 @m.translates(ast.BinOp)
 def binop(node):
