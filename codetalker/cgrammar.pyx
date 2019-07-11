@@ -326,6 +326,7 @@ def get_parse_tree(gid, text, start_i):
     '''
     cdef Token* tokens
 
+    text = text.encode('latin1')
     try_get_tokens(gid, text, &tokens)
 
     cdef TokenStream tstream = tokens_to_stream(tokens)
@@ -403,6 +404,8 @@ def get_ast(gid, text, start_i, ast_classes, ast_tokens):
     cdef TokenStream tstream
     cdef cParseNode* ptree
 
+    text = text.encode('latin1')
+
     try:
         try_get_tokens(gid, text, &tokens)
 
@@ -479,7 +482,7 @@ cdef Rule convert_rule(object rule, unsigned int i):
     crule.dont_ignore = rule.dont_ignore
     crule.num = len(rule.options)
     crule.options = <RuleOption*>malloc(sizeof(RuleOption)*crule.num)
-    rule.name = rule.name.encode()
+    rule.name = rule.name.encode('latin1')
     crule.name = rule.name
     crule.keep_tree = rule.keep_tree
     for i from 0<=i<crule.num:
@@ -574,7 +577,7 @@ cdef object convert_ast_attrs(object ast_attrs, object rules, object tokens, Ast
         for m from 0<=m<result[i].num:
              key = keys[m]
              if PY_MAJOR_VERSION >= 3 and isinstance(keys[m], str):
-                 key = keys[m].encode()
+                 key = keys[m].encode('latin1')
              convert_ast_attr(key, ast_attrs[i]['attrs'][keys[m]], rules, tokens, &result[i].attrs[m])
 
 cdef object which_rt(object it, object rules, object tokens):
@@ -853,14 +856,14 @@ cdef Token* _get_tokens(int gid, char* text, cTokenError* error, char* idchars):
             elif tokens[i]._type == RETOKEN:
                 res = tokens[i].check(state.text[state.at:])
             else:
-                print 'Unknown token type', tokens[i]._type, tokens[i]
+                print('Unknown token type', tokens[i]._type, tokens[i])
                  # should this raise an error?
 
             if res:
                 tmp = <Token*>malloc(sizeof(Token))
                 tmp.value = <char*>malloc(sizeof(char)*(res+1))
                 strncpy(tmp.value, state.text + state.at, res)
-                tmp.value[res] = '\0'
+                tmp.value[res] = b'\0'
                 tmp.allocated = 1
                 # print 'got token!', res, state.at, [tmp.value], state.lineno, state.charno
                 tmp.which = i
@@ -902,7 +905,7 @@ cdef Token* advance(int res, Token* current, bint indent, TokenState* state, int
         int ind = 0
         Token* tmp
     for i from state.at <= i < state.at + res:
-        if state.text[i] == '\n':
+        if state.text[i] == b'\n':
             numlines+=1
             last = i
     state.lineno += numlines
@@ -913,7 +916,7 @@ cdef Token* advance(int res, Token* current, bint indent, TokenState* state, int
     if not indent:
         return current
     # if we just consumed a newline, check & update the indents
-    if indent and res == 1 and state.text[state.at] == <char>'\n':
+    if indent and res == 1 and state.text[state.at] == <char>b'\n':
         ind = t_white(state.at + 1, state.text, state.ln)
         if ind < 0:
             return current
@@ -943,7 +946,7 @@ cdef Token* advance(int res, Token* current, bint indent, TokenState* state, int
                 current = tmp
                 cindent = state.indents[state.num_indents - 1]
             if ind != cindent:
-                etxt = 'invalid indentation -- %d (expected %d)' % (ind, cindent)
+                etxt = 'invalid indentation -- {} (expected {})'.format(ind, cindent).encode('latin1')
                 error.text = etxt
                 error.lineno = state.lineno
                 error.charno = state.charno

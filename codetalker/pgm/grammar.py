@@ -53,7 +53,7 @@ class Grammar:
         self.ast_tokens = tuple(self.tokens.index(tok) for tok in ast_tokens)
         self.indent = indent
         # Note this needs to be reviewed, should we be converting str to bytes or the other way around
-        self.idchars = idchars.encode()
+        self.idchars = idchars.encode('latin1')
 
         self.token_rules = []
         self.token_names = []
