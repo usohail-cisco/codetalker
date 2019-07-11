@@ -9,11 +9,13 @@ except ImportError:
 
 try:
     from Cython.Distutils import build_ext
+    from Cython.Build import cythonize
 except ImportError:
     print('Cython is required to install this module')
     raise
 
 import os
+import sys
 import glob
 
 try:
@@ -50,7 +52,8 @@ setup(
     requires=['cython'],
 
     cmdclass = {'build_ext': build_ext , 'test':test},
-    ext_modules = pyx_mods,
+    #ext_modules = pyx_mods,
+    ext_modules = cythonize(pyx_mods, gdb_debug=True, compiler_directives={'language_level': sys.version_info[0]}),
     include_dirs = 'codetalker',
     packages = ['codetalker', 'codetalker.pgm', 'codetalker.contrib'],
 )
