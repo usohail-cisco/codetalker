@@ -14,11 +14,12 @@ class ParseError(LineError):
 
 class TokenError(LineError):
     def __init__(self, msg, text, lineno, charno):
-        tease = ''
+        tease = b''
         lines = text.splitlines()
         if lineno-1 < len(lines):
             tease = lines[lineno-1][charno-1:charno+30]
-        Exception.__init__(self, msg + ' at (%d, %d) \'%s\'' % (lineno, charno, tease.encode('string_escape')))
+        tease = str(tease)
+        Exception.__init__(self, str(msg) + ' at (%d, %d) \'%s\'' % (lineno, charno, tease.encode('unicode_escape')))
         self.lineno = lineno
         self.charno = charno
     pass
