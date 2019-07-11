@@ -2,6 +2,8 @@
 
 import os
 import glob
+import io
+
 HERE = os.path.dirname(__file__)
 
 files = glob.glob(os.path.join(HERE, '../data/json/*.json'))
@@ -12,7 +14,9 @@ import codetalker.contrib.json as json
 parse_rule = testing.parse_rule(__name__, json.grammar)
 
 def make_parse(fname):
-    text = open(fname).read()
+    with io.open(fname, encoding='utf-8') as f:
+        text = f.read()
+
     def meta():
         if os.path.basename(fname).startswith('fail'):
             try:
