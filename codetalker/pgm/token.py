@@ -10,10 +10,12 @@ class Token(object):
 
     def __repr__(self):
         return u'<%s token "%s" at (%d, %d)>' % (self.__class__.__name__,
-                self.value.encode('string_escape'), self.lineno, self.charno)
+                                                 str(self.value).encode('unicode_escape'),
+                                                 self.lineno,
+                                                 self.charno)
 
     def __str__(self):
-        return self.value
+        return str(self.value.decode('latin1'))
     
     def __eq__(self, other):
         if type(other) in (tuple, list):
@@ -30,7 +32,7 @@ class ReToken(Token):
 
     @classmethod
     def check(cls, text):
-        m = cls.rx.match(text)
+        m = cls.rx.match(text.decode('latin1'))
         if m:
             return len(m.group())
         return 0

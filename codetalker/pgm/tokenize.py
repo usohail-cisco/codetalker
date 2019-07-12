@@ -18,7 +18,7 @@ def tokenize(tokens, text):
                 break
         else:
             raise TokenError('no token matches the text at (%d, %d): "%s"' % (text.lineno,
-                text.charno, text.text[text.at:text.at+10].encode('string_escape')))
+                text.charno, str(text.text[text.at:text.at+10]).encode('unicode_escape')))
         text.advance(len(one.value))
 
 # vim: et sw=4 sts=4
