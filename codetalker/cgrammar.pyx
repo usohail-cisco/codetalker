@@ -296,7 +296,7 @@ def get_tokens(gid, text):
 
     cdef Token* tokens
 
-    try_get_tokens(gid, text, &tokens)
+    try_get_tokens(gid, text.encode('utf-8'), &tokens)
 
     pytokens = convert_back_tokens(gid, tokens)
     kill_tokens(tokens)
