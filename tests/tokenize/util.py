@@ -11,7 +11,7 @@ def just_tokenize(*tokens):
     g = pgm.Grammar(noop, tokens)
     def meta(text):
         _tokens = g.get_tokens(text)
-        assert ''.join(tok.value for tok in _tokens) == text
+        assert ''.join(tok.value.decode('utf-8') for tok in _tokens) == text
         return _tokens
     return meta
 
